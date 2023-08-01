@@ -1,0 +1,24 @@
+spring:
+#  profiles:
+#    include: "local"
+  datasource:
+    url: jdbc:mariadb://localhost:3306/likelion
+    driverClassName: org.mariadb.jdbc.Driver
+    username: likelion
+    password: likelion11
+  jpa:
+    open-in-view: true
+    generate-ddl : true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true # ?? ??
+        show_sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  logging:
+    config: classpath:log4j2.yml
+  level:
+    org.hibernate.SQL: debug
