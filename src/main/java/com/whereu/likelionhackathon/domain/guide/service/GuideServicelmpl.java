@@ -4,6 +4,7 @@ import com.whereu.likelionhackathon.domain.guide.dto.GuideDTO;
 import com.whereu.likelionhackathon.domain.guide.entity.Guide;
 import com.whereu.likelionhackathon.domain.guide.repository.GuideRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,19 +14,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GuideServicelmpl implements GuideService{
     private final GuideRepository guideRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public List<GuideDTO> findAll() {
         List<Guide> guideList = guideRepository.findAll();
-        return guideList.stream().map(this::toDto).collect(Collectors.toList());
-    }
-
-    private GuideDTO toDto(Guide guide) {
-        return GuideDTO.builder()
-                .gid(guide.getGid())
-                .title(guide.getTitle())
-                .content(guide.getContent())
-                .keyword(guide.getKeyword())
-                .build();
+        return guideList.stream().map(m->modelMapper.map(m, GuideDTO.class)).collect(Collectors.toList());
     }
 }
