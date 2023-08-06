@@ -1,6 +1,7 @@
 package com.whereu.likelionhackathon.domain.user.service;
 
 
+import com.whereu.likelionhackathon.domain.guide.dto.GuideDTO;
 import com.whereu.likelionhackathon.domain.guide.service.GuideService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,5 +19,12 @@ public class GuideServiceTest {
     public void testFindAll() {
         guideService.findAll();
         System.out.println("모든 내용이 출력되었습니다.");
+    }
+
+    @Test
+    @DisplayName("한개 내용 출력")
+    public void testFindById() {
+        GuideDTO guideDTO = guideService.findById(1L);
+        System.out.println("출력 완료");
     }
 }

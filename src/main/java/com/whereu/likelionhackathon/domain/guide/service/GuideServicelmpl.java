@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,5 +21,12 @@ public class GuideServicelmpl implements GuideService{
     public List<GuideDTO> findAll() {
         List<Guide> guideList = guideRepository.findAll();
         return guideList.stream().map(m->modelMapper.map(m, GuideDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public GuideDTO findById(Long gid) {
+        Optional<Guide> guide = guideRepository.findById(gid);
+        return modelMapper.map(guide, GuideDTO.class);
+
     }
 }
