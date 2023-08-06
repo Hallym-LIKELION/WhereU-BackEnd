@@ -7,4 +7,6 @@ import java.util.List;
 public interface GuideService {
     List<GuideDTO> findAll();
     GuideDTO findById(Long gid);
+
+    List<GuideDTO> search(String keyword);
 }

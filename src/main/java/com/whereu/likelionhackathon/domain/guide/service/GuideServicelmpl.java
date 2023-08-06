@@ -29,4 +29,10 @@ public class GuideServicelmpl implements GuideService{
         return modelMapper.map(guide, GuideDTO.class);
 
     }
+
+    @Override
+    public List<GuideDTO> search(String keyword) {
+        List<Guide> guideList = guideRepository.findByKeywordContaining(keyword);
+        return guideList.stream().map(m->modelMapper.map(m, GuideDTO.class)).collect(Collectors.toList());
+    }
 }

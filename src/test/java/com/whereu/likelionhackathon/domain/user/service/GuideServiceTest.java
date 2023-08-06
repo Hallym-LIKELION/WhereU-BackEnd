@@ -27,4 +27,11 @@ public class GuideServiceTest {
         GuideDTO guideDTO = guideService.findById(1L);
         System.out.println("출력 완료");
     }
+
+    @Test
+    @DisplayName("검색")
+    public void testSearch() {
+        guideService.search("침수");
+        System.out.println("검색 완료");
+    }
 }
