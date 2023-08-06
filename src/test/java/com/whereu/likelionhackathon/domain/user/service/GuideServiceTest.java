@@ -1,4 +1,4 @@
-package com.whereu.likelionhackathon.service;
+package com.whereu.likelionhackathon.domain.user.service;
 
 
 import com.whereu.likelionhackathon.domain.guide.service.GuideService;
