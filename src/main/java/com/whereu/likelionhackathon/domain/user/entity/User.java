@@ -18,4 +18,6 @@ public class User {
     private Long uid;
 
     private String name;
+
+    private String phone;
 }
