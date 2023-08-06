@@ -4,7 +4,6 @@ import com.whereu.likelionhackathon.domain.guide.dto.GuideDTO;
 import com.whereu.likelionhackathon.domain.guide.service.GuideService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +26,7 @@ public class GuideController {
 
     @GetMapping("/{gid}")
     public GuideDTO guidFindById(@PathVariable(name = "gid") Long gid) {
+        log.info(guideService.findById(gid));
         return guideService.findById(gid);
     }
 }
