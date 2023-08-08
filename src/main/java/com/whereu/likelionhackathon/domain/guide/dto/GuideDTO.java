@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GuideDTO {
     private Long gid;
-    private String title;
-    private String content;
+    private String url;
     private String keyword;
 }
