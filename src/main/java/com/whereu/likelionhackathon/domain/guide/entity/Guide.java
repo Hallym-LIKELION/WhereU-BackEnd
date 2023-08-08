@@ -1,4 +1,4 @@
-package com.whereu.likelionhackathon.domain.user.entity;
+package com.whereu.likelionhackathon.domain.guide.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,13 +12,16 @@ import javax.persistence.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-
+public class Guide {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long uid;
+    private Long gid;
 
-    private String name;
+    private String title;
 
-    private String phone;
+    @Column(length=1000)
+    private String content;
+
+    private String keyword;
+
 }
