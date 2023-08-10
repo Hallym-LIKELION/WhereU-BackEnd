@@ -7,9 +7,7 @@ import com.whereu.likelionhackathon.domain.user.repository.UserRepository;
 import com.whereu.likelionhackathon.domain.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -20,8 +18,8 @@ import java.util.Optional;
 public class UserController {
     private final UserServiceImpl userService;
 
-    @GetMapping("/check")
-    public UserDTO userCheck(UserDTO userDTO) {
+    @PostMapping("/check")
+    public UserDTO userCheck(@RequestBody UserDTO userDTO) {
         UserDTO dto = userService.check(userDTO);
 
         if (dto != null) return dto;
