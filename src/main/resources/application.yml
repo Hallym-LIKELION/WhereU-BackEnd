@@ -1,8 +1,6 @@
 spring:
-#  profiles:
-#    include: "local"
   datasource:
-    url: jdbc:mariadb://localhost:3306/likelion
+    url: jdbc:mariadb://localhost:3307/likelion
     driverClassName: org.mariadb.jdbc.Driver
     username: likelion
     password: likelion11
@@ -21,4 +19,9 @@ spring:
   logging:
     config: classpath:log4j2.yml
   level:
+    p6spy : info
     org.hibernate.SQL: debug
+
+api-url : http://apis.data.go.kr/1360000/WthrWrnInfoService/getPwnCd?serviceKey=IPIATjZ7%2FGuNvP12UpJx%2FIZmA0UWtoCMzmIlAHPOQGBpzTWv0ONDQ%2BLSqd3crii%2FTeXIWG29K%2F0N6Unmh4WFtA%3D%3D&numOfRows=100&pageNo=1&dataType=JSON&warningType=
+
+
