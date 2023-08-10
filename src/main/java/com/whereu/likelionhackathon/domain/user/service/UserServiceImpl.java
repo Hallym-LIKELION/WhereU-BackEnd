@@ -19,6 +19,7 @@ public class UserServiceImpl implements UserService{
      * @param userDTO
      * uid가 DB에 없다면 DB에 저장.
      * uid가 DB에 있다면 DB에서 전체정보 조회 후 반환.
+     * uid가 DB에 없는데 name을 안보낸 경우 -> 에러처리
      */
     @Override
     public UserDTO check(UserDTO userDTO) {
@@ -26,7 +27,10 @@ public class UserServiceImpl implements UserService{
         Optional<User> byUid = userRepository.findByUid(uid);
         if (byUid.isPresent()) {
             return modelMapper.map(byUid.get(), UserDTO.class);
-        } else {
+        } else { //등록이 안되어있는데 name이 null인 경우
+            if (userDTO.getName() == null) {
+                return null;
+            }
             User user = modelMapper.map(userDTO, User.class);
             userRepository.save(user);
             return userDTO;
