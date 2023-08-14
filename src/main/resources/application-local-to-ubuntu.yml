@@ -1,0 +1,4 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://203.245.41.173:3306/likelion
+
