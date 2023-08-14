@@ -1,6 +1,8 @@
 spring:
+  profiles:
+    include: "local"
   datasource:
-    url: jdbc:mariadb://localhost:3307/likelion
+    url: ${spring.datasource.url}
     driverClassName: org.mariadb.jdbc.Driver
     username: likelion
     password: likelion11
@@ -13,6 +15,10 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+  cache:
+    type: caffeine
+    caffeine:
+      spec: expireAfterWrite=5s # 5초간 같은 특보번호로 요청시 캐싱 데이터 반환
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

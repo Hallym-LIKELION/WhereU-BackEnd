@@ -2,16 +2,14 @@ package com.whereu.likelionhackathon.domain.weather.service;
 
 import com.whereu.likelionhackathon.domain.weather.dto.LocationDTO;
 import com.whereu.likelionhackathon.domain.weather.dto.WeatherDTO;
-import com.whereu.likelionhackathon.domain.weather.entity.Weather;
 import com.whereu.likelionhackathon.domain.weather.repository.WeatherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -31,54 +28,72 @@ public class WeatherService {
     @Value("${api-url}")
     private String API_URL;
 
-    /**
-     * 특보 종류를 input으로 받음.
-     * 특보 종류로 API 요청.
-     * 1-강풍, 2-호우, 3-한파, 4-건조, 5-폭풍해일, 6-풍랑, 7-태풍, 8-대설,9-황사, 12-폭염
-     */
+    @Cacheable(value = "weatherData", key = "#choice", unless = "#result == null")
     public List<WeatherDTO> fetchData(int choice) {
-        String tempURL = API_URL + choice;
-        log.info("API_URL = {}", tempURL);
-        ResponseEntity<String> response = restTemplate.getForEntity(URI.create(tempURL), String.class);
 
+        String tempURL = API_URL + choice;
+        ResponseEntity<String> response = callApi(tempURL);
+        List<WeatherDTO> weatherDTOList = processResponse(response);
+
+        return weatherDTOList;
+    }
+
+    private ResponseEntity<String> callApi(String url) {
+        log.info("API_URL = {}", url);
+        return restTemplate.getForEntity(URI.create(url), String.class);
+    }
+
+    private List<WeatherDTO> processResponse(ResponseEntity<String> response) {
         List<WeatherDTO> weatherDTOList = new ArrayList<>();
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            String responseBody = response.getBody();
-            JSONObject jsonObject = new JSONObject(responseBody);
-            JSONObject json_response = jsonObject.getJSONObject("response");
-            if (json_response.isNull("body")) { // 데이터가 없을 때
-                return null;
-            }
-            JSONObject body = json_response.getJSONObject("body");
-            JSONObject items = body.getJSONObject("items");
-            JSONArray itemArray = items.getJSONArray("item");
-
-            for (int i = 0; i < itemArray.length(); i++) {
-                JSONObject obj = itemArray.getJSONObject(i);
-
-                String areaCode = obj.getString("areaCode");
-                String areaName = obj.getString("areaName");
-                int warnVar = obj.getInt("warnVar");
-                int warnStress = obj.getInt("warnStress");
-
-                List<LocationDTO> locationByAreaCode = weatherRepository.findLocationByAreaCode(areaCode);
-                LocationDTO locationDTO = locationByAreaCode.get(0); //처음나온 1개만
-
-                WeatherDTO weatherDTO = WeatherDTO.builder().
-                        lat(locationDTO.getLat()).
-                        lon(locationDTO.getLon()).
-                        warnVar(warnVar).
-                        warnStress(warnStress).
-                        areaName(areaName).build();
-
-                weatherDTOList.add(weatherDTO);
-            }
+            JSONObject jsonObject = new JSONObject(response.getBody());
+            weatherDTOList = parseJson(jsonObject);
         } else {
-            log.error("Error while fetching data from API: " + response.getStatusCode());
+            handleError(response.getStatusCode());
         }
 
-        tempURL = API_URL;
         return weatherDTOList;
+    }
+
+    private List<WeatherDTO> parseJson(JSONObject jsonObject) {
+        List<WeatherDTO> weatherDTOList = new ArrayList<>();
+        JSONObject json_response = jsonObject.getJSONObject("response");
+
+        if (json_response.isNull("body")) {
+            return weatherDTOList;
+        }
+
+        JSONObject body = json_response.getJSONObject("body");
+        JSONObject items = body.getJSONObject("items");
+        JSONArray itemArray = items.getJSONArray("item");
+
+        for (int i = 0; i < itemArray.length(); i++) {
+            JSONObject obj = itemArray.getJSONObject(i);
+
+            String areaCode = obj.getString("areaCode");
+
+            List<LocationDTO> locationByAreaCode = weatherRepository.findLocationByAreaCode(areaCode);
+            System.out.println(locationByAreaCode.size());
+            LocationDTO locationDTO = locationByAreaCode.get(0);
+
+            WeatherDTO weatherDTO = createWeatherDTO(locationDTO, obj);
+            weatherDTOList.add(weatherDTO);
+        }
+
+        return weatherDTOList;
+    }
+
+    private void handleError(HttpStatus statusCode) {
+        log.error("Error while fetching data from API: " + statusCode);
+    }
+
+    private WeatherDTO createWeatherDTO(LocationDTO location, JSONObject obj) {
+        return WeatherDTO.builder()
+                .lat(location.getLat())
+                .lon(location.getLon())
+                .warnVar(obj.getInt("warnVar"))
+                .warnStress(obj.getInt("warnStress"))
+                .areaName(obj.getString("areaName")).build();
     }
 }
