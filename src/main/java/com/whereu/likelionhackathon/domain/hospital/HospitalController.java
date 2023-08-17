@@ -23,13 +23,13 @@ public class HospitalController {
     private final HospitalService hospitalService;
 
     // lat = 위도
-    // long = 경도
+    // lon = 경도
 
     //@RequestParam(name = "lat") float latit, @RequestParam(name = "long") float longit
 
     @GetMapping()
-    public List<HospitalDTO> guideFindAll(@RequestParam(name = "lat") float latit, @RequestParam(name = "long") float longit) {
-        List<HospitalDTO> list = hospitalService.findHospital(latit, longit);
+    public List<HospitalDTO> guideFindAll(@RequestParam(name = "lat") float lat, @RequestParam(name = "lon") float lon) {
+        List<HospitalDTO> list = hospitalService.findHospital(lat, lon);
         if (list == null) log.error("정보가 없습니다.");
         return list;
     }
