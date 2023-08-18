@@ -4,6 +4,8 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.whereu.likelionhackathon.domain.guide.entity.Guide;
 import com.whereu.likelionhackathon.domain.guide.repository.GuideRepository;
+import com.whereu.likelionhackathon.domain.shelter.entity.Shelter;
+import com.whereu.likelionhackathon.domain.shelter.repository.ShelterRepository;
 import com.whereu.likelionhackathon.domain.weather.entity.Weather;
 import com.whereu.likelionhackathon.domain.weather.repository.WeatherRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,9 @@ public class DataInsert {
 
     @Autowired
     WeatherRepository weatherRepository;
+
+    @Autowired
+    ShelterRepository shelterRepository;
 
     @Test
     @DisplayName("가이드 내용 저장")
@@ -60,7 +65,28 @@ public class DataInsert {
     }
 
     @Test
-    public void insertCSV() {
+    public void insertShelter() {
+        String fileName = "src/main/resources/shelter.csv";
+
+        try (CSVReader csvReader = new CSVReaderBuilder(new FileReader(fileName, StandardCharsets.UTF_8)).withSkipLines(1).build()) {
+            String[] line;
+
+            while ((line = csvReader.readNext()) != null) {
+                double lat = Double.parseDouble(line[1]);
+                double lon = Double.parseDouble(line[2]);
+                String areaName = line[0];
+
+                Shelter shelter = new Shelter(areaName, lat, lon);
+                shelterRepository.save(shelter);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void insertWeather() {
         String fileName = "src/main/resources/weather.csv";
 
         try (CSVReader csvReader = new CSVReaderBuilder(new FileReader(fileName, StandardCharsets.UTF_8)).withSkipLines(1).build()) {
@@ -78,6 +104,5 @@ public class DataInsert {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
