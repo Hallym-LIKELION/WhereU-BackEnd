@@ -30,8 +30,8 @@ public class HospitalController {
     //@RequestParam(name = "lat") float latit, @RequestParam(name = "long") float longit
 
     @GetMapping()
-    public ResponseEntity<String> findHospital(@RequestParam(name = "lat") float lat, @RequestParam(name = "lon") float lon) {
-        ResponseEntity<String> list = hospitalService.findHospital(lat, lon);
+    public List<HospitalDTO> findHospital(@RequestParam(name = "lat") float lat, @RequestParam(name = "lon") float lon) {
+        List<HospitalDTO> list = hospitalService.findHospital(lat, lon);
         if (list == null) log.error("정보가 없습니다.");
         return list;
     }
@@ -39,6 +39,13 @@ public class HospitalController {
     @GetMapping("/search")
     public List<HospitalDTO> findName(@RequestParam(name = "keyword") String keyword) throws UnsupportedEncodingException {
         List<HospitalDTO> list = hospitalService.findname(keyword);
+        if (list == null) log.error("검색결과가 나오질 않습니다.");
+        return list;
+    }
+
+    @GetMapping("/div")
+    public List<HospitalDTO> finddiv(@RequestParam(name = "div") String div) throws UnsupportedEncodingException {
+        List<HospitalDTO> list = hospitalService.finddiv(div);
         if (list == null) log.error("검색결과가 나오질 않습니다.");
         return list;
     }
