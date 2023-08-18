@@ -21,6 +21,10 @@ configurations {
 }
 
 repositories {
+	maven {
+		url 'https://repo.osgeo.org/repository/release/'
+	}
+
 	mavenCentral()
 }
 
@@ -32,6 +36,7 @@ dependencies {
 	implementation 'org.json:json:20190722'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'com.github.ben-manes.caffeine:caffeine:2.9.2'
+	implementation 'org.locationtech.proj4j:proj4j:1.0.0'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.7.1'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
