@@ -27,9 +27,3 @@ spring:
   level:
     p6spy : info
     org.hibernate.SQL: debug
-
-api-url : http://apis.data.go.kr/1360000/WthrWrnInfoService/getPwnCd?serviceKey=IPIATjZ7%2FGuNvP12UpJx%2FIZmA0UWtoCMzmIlAHPOQGBpzTWv0ONDQ%2BLSqd3crii%2FTeXIWG29K%2F0N6Unmh4WFtA%3D%3D&numOfRows=100&pageNo=1&dataType=JSON&warningType=
-
-hospital-api : https://apis.data.go.kr/B551182/hospInfoServicev2/getHospBasisList?serviceKey=HZVzxNG6waSnzgHuVY9BYDrurgl06ZnxxPQPRKDZrfWjcKOuN62VsxIk1t%2BuDaxuXnFXgQSuXiqyUeGw68NtYQ%3D%3D&pageNo=1&numOfRows=30
-
-
