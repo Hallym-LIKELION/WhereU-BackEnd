@@ -1,11 +1,11 @@
 spring:
   profiles:
-    include: "local"
+    include: "ubuntu"
   datasource:
     url: ${spring.datasource.url}
-    driverClassName: org.mariadb.jdbc.Driver
-    username: likelion
-    password: likelion11
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
   jpa:
     open-in-view: true
     generate-ddl : true
@@ -13,8 +13,8 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        format_sql: true
-        show_sql: true
+        format_sql: false
+        show_sql: false
   cache:
     type: caffeine
     caffeine:
@@ -22,8 +22,6 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  logging:
-    config: classpath:log4j2.yml
-  level:
-    p6spy : info
-    org.hibernate.SQL: debug
+
+api-url : ${api-url}
+hospital-api : ${hospital-api}

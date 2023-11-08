@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ShelterRepository extends JpaRepository<Shelter, Long> {
 
-    @Query(value = "SELECT * FROM Shelter s WHERE (6371 * acos(cos(radians(:latitude)) * cos(radians(s.lat)) " +
+    @Query(value = "SELECT * FROM shelter s WHERE (6371 * acos(cos(radians(:latitude)) * cos(radians(s.lat)) " +
             "* cos(radians(s.lon) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(s.lat))))" +
             " < :distance", nativeQuery = true)
     List<Shelter> findSheltersWithin(@Param("latitude") double latitude, @Param("longitude") double longitude, @Param("distance") double distance);
