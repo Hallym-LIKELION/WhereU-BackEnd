@@ -39,7 +39,7 @@ public class WeatherController {
     private boolean choiceValidation(int choice) {
         Integer[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 12};
         Set<Integer> numberSet = new HashSet<>(Arrays.asList(numbers));
-        return numberSet.contains(choice) ? true : false;
+        return numberSet.contains(choice);
     }
 
 }
